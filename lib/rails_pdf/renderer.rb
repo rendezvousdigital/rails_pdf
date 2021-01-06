@@ -18,11 +18,12 @@ module RailsPDF
     end
 
     def render(&block)
-      controller = ActionController::Base.new
-      view = ActionView::Base.new(ActionController::Base.view_paths, {}, controller)
-      params = { file: @file, layout: @layout }
-      params = params.merge(locals: @locals) if @locals.present?
-      content = view.render(params)
+      content = ApplicationController.render(
+        :template => @file,
+        :locals   => @locals,
+        :layout   => @layout,
+        :format   => :html
+      )
 
       logger.debug "RailsPDF ====="
       logger.debug "RailsPDF content:\n#{content}"
